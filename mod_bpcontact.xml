@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="3.1" client="site" method="upgrade">
+	<name>mod_bpcontact</name>
+	<author>Artur Stępień</author>
+	<creationDate>November 2016</creationDate>
+	<copyright>Copyright (C) 2016 BestProject. All rights reserved.</copyright>
+	<license>GNU General Public License version 3 or later; see LICENSE.txt</license>
+	<authorEmail>artur.stepien@bestproject.pl</authorEmail>
+	<authorUrl>www.bestproject.pl</authorUrl>
+	<version>1.0.0</version>
+	<description>MOD_BPCONTACT_XML_DESCRIPTION</description>
+	
+	<files>
+		<filename module="mod_bpcontact">mod_bpcontact.php</filename>
+		<folder>tmpl</folder>
+		<filename>helper.php</filename>
+	</files>
+	
+	<languages>
+		<language tag="pl-PL">language/pl-PL/pl-PL.mod_bpcontact.ini</language>
+		<language tag="pl-PL">language/pl-PL/pl-PL.mod_bpcontact.sys.ini</language>
+	</languages>
+	
+	<config>
+		<fields name="params">
+            
+			<fieldset name="basic"
+				addfieldpath="/administrator/components/com_contact/models/fields">
+                
+                <field name="mode" type="list"
+                    label="MOD_BPCONTACT_FIELD_MODE_LABEL"
+                    description="MOD_BPCONTACT_FIELD_MODE_DESC">
+                    <option value="single">MOD_BPCONTACT_FIELD_MODE_OPTION_SINGLE</option>
+                    <option value="category">MOD_BPCONTACT_FIELD_MODE_OPTION_CATEGORY</option>
+                    <option value="grouped">MOD_BPCONTACT_FIELD_MODE_OPTION_GROUPED</option>
+                    <option value="flat">MOD_BPCONTACT_FIELD_MODE_OPTION_FLAT</option>
+                </field>
+                
+				<field name="contact_id" type="modal_contact"
+					showon="mode:single"
+					label="MOD_BPCONTACT_FIELD_CONTACT_LABEL"
+					description="MOD_BPCONTACT_FIELD_CONTACT_DESC" />
+                
+                <field name="category_id" type="category" 
+                    showon="mode:category" extension="com_contact"
+                    label="MOD_BPCONTACT_FIELD_CATEGORY_ID_LABEL"
+                    description="MOD_BPCONTACT_FIELD_CATEGORY_ID_DESC"
+                    />
+                
+                <field name="order" type="list" 
+                    showon="mode:category,grouped,flat"
+                    label="MOD_BPCONTACT_FIELD_ORDER_LABEL"
+                    description="MOD_BPCONTACT_FIELD_ORDER_DESC">
+                    <option value="ordering">MOD_BPCONTACT_FIELD_ORDER_OPTION_ORDERING</option>
+                    <option value="title">MOD_BPCONTACT_FIELD_ORDER_OPTION_TITLE</option>
+                </field>
+                
+                <field name="display_form" type="radio"
+                    default="1" showon="mode:single" class="btn-group btn-group-yesno"
+                    label="MOD_BPCONTACT_FIELD_DISPLAY_FORM_LABEL"
+                    description="MOD_BPCONTACT_FIELD_DISPLAY_FORM_DESC"
+                    filter="INT">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                
+                <field name="display_info" type="radio"
+                    default="1" class="btn-group btn-group-yesno"
+                    label="MOD_BPCONTACT_FIELD_DISPLAY_INFO_LABEL"
+                    description="MOD_BPCONTACT_FIELD_DISPLAY_INFO_DESC"
+                    filter="INT"
+                    showon="mode:single">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                
+                <field name="display_title" type="radio"
+                    default="1" class="btn-group btn-group-yesno"
+                    label="MOD_BPCONTACT_FIELD_DISPLAY_TITLE_LABEL"
+                    description="MOD_BPCONTACT_FIELD_DISPLAY_TITLE_DESC"
+                    filter="INT"
+                    showon="mode:single[AND]display_info:1">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                
+                <field name="display_image" type="radio"
+                    default="1" class="btn-group btn-group-yesno"
+                    label="MOD_BPCONTACT_FIELD_DISPLAY_IMAGE_LABEL"
+                    description="MOD_BPCONTACT_FIELD_DISPLAY_IMAGE_DESC"
+                    filter="INT"
+                    showon="mode:single[AND]display_info:1">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                
+                <field name="display_position" type="radio"
+                    default="1" class="btn-group btn-group-yesno"
+                    label="MOD_BPCONTACT_FIELD_DISPLAY_POSITION_LABEL"
+                    description="MOD_BPCONTACT_FIELD_DISPLAY_POSITION_DESC"
+                    filter="INT"
+                    showon="mode:single[AND]display_info:1">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                
+                <field name="display_email" type="radio"
+                    default="1" class="btn-group btn-group-yesno"
+                    label="MOD_BPCONTACT_FIELD_DISPLAY_EMAIL_LABEL"
+                    description="MOD_BPCONTACT_FIELD_DISPLAY_EMAIL_DESC"
+                    filter="INT"
+                    showon="mode:single[AND]display_info:1">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                
+                <field name="display_address" type="radio"
+                    default="1" class="btn-group btn-group-yesno"
+                    label="MOD_BPCONTACT_FIELD_DISPLAY_ADDRESS_LABEL"
+                    description="MOD_BPCONTACT_FIELD_DISPLAY_ADDRESS_DESC"
+                    filter="INT"
+                    showon="mode:single[AND]display_info:1">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                
+                <field name="display_suburb" type="radio"
+                    default="1" class="btn-group btn-group-yesno"
+                    label="MOD_BPCONTACT_FIELD_DISPLAY_SUBURB_LABEL"
+                    description="MOD_BPCONTACT_FIELD_DISPLAY_SUBURB_DESC"
+                    filter="INT"
+                    showon="mode:single[AND]display_info:1">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                
+                <field name="display_state" type="radio"
+                    default="1" class="btn-group btn-group-yesno"
+                    label="MOD_BPCONTACT_FIELD_DISPLAY_STATE_LABEL"
+                    description="MOD_BPCONTACT_FIELD_DISPLAY_STATE_DESC"
+                    filter="INT"
+                    showon="mode:single[AND]display_info:1">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                
+                <field name="display_post" type="radio"
+                    default="1" class="btn-group btn-group-yesno"
+                    label="MOD_BPCONTACT_FIELD_DISPLAY_POST_LABEL"
+                    description="MOD_BPCONTACT_FIELD_DISPLAY_POST_DESC"
+                    filter="INT"
+                    showon="mode:single[AND]display_info:1">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                
+                <field name="display_country" type="radio"
+                    default="1" class="btn-group btn-group-yesno"
+                    label="MOD_BPCONTACT_FIELD_DISPLAY_COUNTRY_LABEL"
+                    description="MOD_BPCONTACT_FIELD_DISPLAY_COUNTRY_DESC"
+                    filter="INT"
+                    showon="mode:single[AND]display_info:1">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                
+                <field name="display_telephone" type="radio"
+                    default="1" class="btn-group btn-group-yesno"
+                    label="MOD_BPCONTACT_FIELD_DISPLAY_TELEPHONE_LABEL"
+                    description="MOD_BPCONTACT_FIELD_DISPLAY_TELEPHONE_DESC"
+                    filter="INT"
+                    showon="mode:single[AND]display_info:1">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                
+                <field name="display_mobile" type="radio"
+                    default="1" class="btn-group btn-group-yesno"
+                    label="MOD_BPCONTACT_FIELD_DISPLAY_MOBILE_LABEL"
+                    description="MOD_BPCONTACT_FIELD_DISPLAY_MOBILE_DESC"
+                    filter="INT"
+                    showon="mode:single[AND]display_info:1">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                
+                <field name="display_fax" type="radio"
+                    default="1" class="btn-group btn-group-yesno"
+                    label="MOD_BPCONTACT_FIELD_DISPLAY_FAX_LABEL"
+                    description="MOD_BPCONTACT_FIELD_DISPLAY_FAX_DESC"
+                    filter="INT"
+                    showon="mode:single[AND]display_info:1">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                
+                <field name="display_webpage" type="radio"
+                    default="1" class="btn-group btn-group-yesno"
+                    label="MOD_BPCONTACT_FIELD_DISPLAY_WEBPAGE_LABEL"
+                    description="MOD_BPCONTACT_FIELD_DISPLAY_WEBPAGE_DESC"
+                    filter="INT"
+                    showon="mode:single[AND]display_info:1">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                
+                <field name="display_misc" type="radio"
+                    default="1" class="btn-group btn-group-yesno"
+                    label="MOD_BPCONTACT_FIELD_DISPLAY_MISC_LABEL"
+                    description="MOD_BPCONTACT_FIELD_DISPLAY_MISC_DESC"
+                    filter="INT"
+                    showon="mode:single[AND]display_info:1">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                
+                <field name="display_links" type="radio"
+                    default="1" class="btn-group btn-group-yesno"
+                    label="MOD_BPCONTACT_FIELD_DISPLAY_LINKS_LABEL"
+                    description="MOD_BPCONTACT_FIELD_DISPLAY_LINKS_DESC"
+                    filter="INT"
+                    showon="mode:single[AND]display_info:1">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                
+                
+			</fieldset>
+            
+			<fieldset
+				name="advanced">
+                
+				<field
+					name="layout"
+					type="modulelayout"
+					label="JFIELD_ALT_LAYOUT_LABEL"
+					description="JFIELD_ALT_MODULE_LAYOUT_DESC" />
+
+				<field
+					name="moduleclass_sfx"
+					type="textarea" rows="3"
+					label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+					description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
+
+				<field
+					name="cache"
+					type="list"
+					default="1"
+					label="COM_MODULES_FIELD_CACHING_LABEL"
+					description="COM_MODULES_FIELD_CACHING_DESC">
+					<option
+						value="1">JGLOBAL_USE_GLOBAL</option>
+					<option
+						value="0">COM_MODULES_FIELD_VALUE_NOCACHING</option>
+				</field>
+
+				<field
+					name="cache_time"
+					type="text"
+					default="900"
+					label="COM_MODULES_FIELD_CACHE_TIME_LABEL"
+					description="COM_MODULES_FIELD_CACHE_TIME_DESC" />
+			</fieldset>
+            
+		</fields>
+	</config>
+</extension>
