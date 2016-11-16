@@ -40,7 +40,7 @@ class ModBPContactHelper {
 		$query->from('#__contact_details AS a');
 
 		// Only published contacts
-		$query->where('a.state=1');
+		$query->where('a.published=1');
 
 		// If this is a category list mode
 		if( $params->get('list_mode','all')=='category' ) {
@@ -111,6 +111,35 @@ class ModBPContactHelper {
 		$contact = $model->getItem($params->get('contact_id'));
 		
 		return $contact;
+	}
+
+	/**
+	 * Return a JFormField object that can be used in rendering inside module layout.
+	 *
+	 * @param	\JForm	$form		A contact form instance.
+	 * @param	String	$mode		Mode of the module.
+	 * @param	Array	$contacts	A list of contacts for the field.
+	 * 
+	 * @return	\JFormFieldList
+	 */
+	public static function getContactsListField($form, $mode, $contacts){
+
+		// If this is a simple contacts list field
+		if( $mode === 'category' OR $mode==='flat' ) {
+			$xml = '<field name="id" type="list" hint="Testing" label="MOD_BPCONTACT_LAYOUT_SELECT_CONTACT_LABEL" description="MOD_BPCONTACT_LAYOUT_SELECT_CONTACT_DESC">';
+			foreach( $contacts AS $contact ) {
+				$xml.= '<option value="'.$contact->id.'">'.$contact->name.'</option>';
+			}
+			$xml.= '</field>';
+
+			jimport('joomla.form.field');
+			require_once JPATH_SITE.'/libraries/joomla/form/fields/list.php';
+			$field = new JFormFieldList($form);
+			$field->setup(new SimpleXMLElement($xml),'');
+
+		}
+
+		return $field;
 	}
 
 }

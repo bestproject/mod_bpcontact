@@ -64,6 +64,16 @@
                     <option value="0">JNO</option>
                 </field>
                 
+                <field name="display_form_copy" type="radio"
+                    default="1" class="btn-group btn-group-yesno"
+                    label="MOD_BPCONTACT_FIELD_DISPLAY_FORM_COPY_LABEL"
+                    description="MOD_BPCONTACT_FIELD_FORM_COPY_DESC"
+                    filter="INT"
+                    showon="mode:single[AND]display_form:1[OR]mode:category,grouped,flat">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                
                 <field name="display_info" type="radio"
                     default="1" class="btn-group btn-group-yesno"
                     label="MOD_BPCONTACT_FIELD_DISPLAY_INFO_LABEL"
@@ -74,10 +84,10 @@
                     <option value="0">JNO</option>
                 </field>
                 
-                <field name="display_title" type="radio"
+                <field name="display_name" type="radio"
                     default="1" class="btn-group btn-group-yesno"
-                    label="MOD_BPCONTACT_FIELD_DISPLAY_TITLE_LABEL"
-                    description="MOD_BPCONTACT_FIELD_DISPLAY_TITLE_DESC"
+                    label="MOD_BPCONTACT_FIELD_DISPLAY_NAME_LABEL"
+                    description="MOD_BPCONTACT_FIELD_DISPLAY_NAME_DESC"
                     filter="INT"
                     showon="mode:single[AND]display_info:1">
                     <option value="1">JYES</option>

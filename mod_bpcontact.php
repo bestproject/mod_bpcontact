@@ -10,17 +10,26 @@ require_once __DIR__ . '/helper.php';
 $form = ModBPContactHelper::getForm($params);
 
 // If this is a single contact mode get only data of a single contact
-if( $params->get('mode','single')=='signle' ) {
+if( $params->get('mode','single')=='single' ) {
 	$contact = ModBPContactHelper::getContact($params);
 
 // Its a list mode (category,flag or grouped) so get a list of contacts
 } else {
 	
-	$list = ModBPContactHelper::getContactsList($params);
+	$contacts = ModBPContactHelper::getContactsList($params);
 }
 
 // Module classes prefix
 $moduleclass_sfx = htmlspecialchars($params->get('moduleclass_sfx'));
+
+// Form params
+$mode = $params->get('mode','single');
+$display_form = (bool)$params->get('display_form','1');
+$display_form_copy = $params->get('display_form_copy','1') AND (($display_form AND $mode==='single') OR in_array($mode, array('category','grouped','flat')));
+$field_id = ModBPContactHelper::getContactsListField($form, $mode, $contacts);
+
+// Contact informations params
+// @TODO
 
 // Render module output
 require JModuleHelper::getLayoutPath('mod_bpcontact', $params->get('layout', 'default'));

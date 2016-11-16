@@ -1,48 +1,19 @@
 <?php defined('_JEXEC') or die;
 
+$has_form = (bool)$params->get('display_form','1');
+$has_informations = ((bool)$params->get('display_info','1') AND $params->get('mode','single')==='single' AND $params->get('contact_id')>0);
 ?>
 <div class="modbpcontact<?php echo $moduleclass_sfx ?>">
 	<div class="row">
-		<div class="col-sm-6">
-			<form action="<?php echo JRoute::_('index.php'); ?>" method="post" class="form-validate">
-				<h3><?php echo JText::_('MOD_BPCONTACT_FORM_HEADING') ?></h3>
-				<?php $fieldsets = $form->getFieldsets();
-				
-				foreach($fieldsets AS $fieldset):
-				$fields = $form->getFieldset($fieldset->name); 
-				?>
-				<div class="group">
-					<?php	foreach( $fields AS $field ){
-						echo $form->renderField($field->getAttribute('name'));
-					} ?>
-				</div>
-				<?php endforeach ?>
-				<div class="form-actions">
-					<input name="submit" type="submit" class="btn btn-primary" value="<?php echo JText::_('MOD_BPCONTACT_FORM_SUBMIT') ?>"/>
-				</div>
-				<input type="hidden" name="option" value="com_contact" />
-				<input type="hidden" name="task" value="contact.submit" />
-				<input type="hidden" name="return" value="<?php echo JURI::current() ?>" />
-				<input type="hidden" name="id" value="<?php echo $contact->slug ?>" />
-				<?php echo JHtml::_('form.token') ?>
-			</form>
+		<?php if( $has_informations ): ?>
+		<div class="<?php echo ($has_form ? 'col-xs-12 col-sm-6':'col-xs-12') ?>">
+			<?php include JModuleHelper::getLayoutPath('mod_bpcontact', $params->get('layout', 'default').'_informations'); ?>
 		</div>
-		<div class="col-sm-6">
-			<h3><?php echo JText::_('MOD_BPCONTACT_INFO_HEADING') ?></h3>
-			<?php if( !empty($contact->address) ): ?>
-				<h4><?php echo JText::_('MOD_BPCONTACT_INFO_ADDRESS') ?>:</h4>
-				<div class="address"><?php echo $contact->address ?></div>
-			<?php endif ?>
-			
-			<?php if( !empty($contact->telephone) ): ?>
-				<h4><?php echo JText::_('MOD_BPCONTACT_INFO_PHONE') ?>:</h4>
-				<div class="address"><?php echo $contact->telephone ?></div>
-			<?php endif ?>
-				
-			<?php if( !empty($contact->email_to) ): ?>
-				<h4><?php echo JText::_('MOD_BPCONTACT_INFO_EMAIL') ?>:</h4>
-				<div class="email"><?php echo $contact->email_to ?></div>
-			<?php endif ?>
+		<?php endif ?>
+		<?php if( $has_form ): ?>
+		<div class="<?php echo ($has_informations ? 'col-xs-12 col-sm-6':'col-xs-12') ?>">
+			<?php include JModuleHelper::getLayoutPath('mod_bpcontact', $params->get('layout', 'default').'_form'); ?>
 		</div>
+		<?php endif ?>
 	</div>
 </div>
