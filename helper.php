@@ -36,26 +36,26 @@ class ModBPContactHelper {
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 
-		$query->select('a.*');
+		$query->select('a.*, CONCAT(a.id,":",a.alias) AS `slug`');
 		$query->from('#__contact_details AS a');
 
 		// Only published contacts
 		$query->where('a.published=1');
 
 		// If this is a category list mode
-		if( $params->get('list_mode','all')=='category' ) {
+		if( $params->get('mode','flat')=='category' ) {
 
 			// Limit to a category
 			$query->where('a.catid='.(int)$params->get('category_id'));
 
 			// Join over categories list
 			$query->leftJoin('#__categories AS b ON b.id=a.catid');
-			$query->select('b.title AS `category_title`, b.alias as `category_alias`, CONCAT(b.id,":",b.alias) AS `slug`');
-			$query->where('b.state=1');
+			$query->select('b.title AS `category_title`, b.alias as `category_alias`, CONCAT(b.id,":",b.alias) AS `category_slug`');
+			$query->where('b.published=1');
 
 			// Ordering by ordering field
 			if( $params->get('order','ordering') ) {
-				$query->order('b.ordering ASC, a.ordering ASC');
+				$query->order('b.lft ASC, a.ordering ASC');
 
 			// Ordering by title (default)
 			} else {
@@ -63,16 +63,16 @@ class ModBPContactHelper {
 			}
 
 		// This is a grouped list mode
-		} elseif( $params->get('list_mode','all')=='grouped' ) {
+		} elseif( $params->get('mode','flat')=='grouped' ) {
 
 			// Join over categories
 			$query->leftJoin('#__categories AS b ON b.id=a.catid');
-			$query->select('b.title AS `category_title`, b.alias as `category_alias`, CONCAT(b.id,":",b.alias) AS `slug`');
-			$query->where('b.state=1');
+			$query->select('b.title AS `category_title`, b.alias as `category_alias`, CONCAT(b.id,":",b.alias) AS `category_slug`');
+			$query->where('b.published=1');
 			
 			// Order by ordering field
 			if( $params->get('order','ordering') ) {
-				$query->order('b.ordering ASC, a.ordering ASC');
+				$query->order('b.lft ASC, a.ordering ASC');
 
 			// Order by title (default)
 			} else {
@@ -128,14 +128,48 @@ class ModBPContactHelper {
 		if( $mode === 'category' OR $mode==='flat' ) {
 			$xml = '<field name="id" type="list" hint="Testing" label="MOD_BPCONTACT_LAYOUT_SELECT_CONTACT_LABEL" description="MOD_BPCONTACT_LAYOUT_SELECT_CONTACT_DESC">';
 			foreach( $contacts AS $contact ) {
-				$xml.= '<option value="'.$contact->id.'">'.$contact->name.'</option>';
+				$xml.= '<option value="'.$contact->slug.'">'.$contact->name.'</option>';
 			}
 			$xml.= '</field>';
 
-			jimport('joomla.form.field');
+			// Create a JField instance from provided XML
 			require_once JPATH_SITE.'/libraries/joomla/form/fields/list.php';
 			$field = new JFormFieldList($form);
-			$field->setup(new SimpleXMLElement($xml),'');
+			$field->setup(new SimpleXMLElement($xml),'','contact2');
+
+		} elseif( $mode==='grouped' ) {
+
+			// Prepare a JForm field XML for grouped contacts list
+			$xml = '<field name="id" type="groupedlist" hint="Testing" label="MOD_BPCONTACT_LAYOUT_SELECT_CONTACT_LABEL" description="MOD_BPCONTACT_LAYOUT_SELECT_CONTACT_DESC">';
+			$contacts_count = count($contacts);
+			foreach( $contacts AS $idx=>$contact ) {
+				// This is a group starting so prepare its XML
+				if( $idx===0 OR ($idx>0 AND $contact->category_title!==$contacts[$idx-1]->category_title) ) {
+					if( $idx>0 ) {
+						$xml.='</group>';
+					}
+					$xml.= '<group label="'.$contact->category_title.'">';
+				}
+
+				// Add category entry
+				$xml.= '<option value="'.$contact->slug.'">'.$contact->name.'</option>';
+
+				// This is the last list element so close the group
+				if( $idx+1 === $contacts_count ) {
+					$xml.= '</group>';
+				}
+			}
+			$xml.= '</field>';
+
+			// Create a JField instance from provided XML
+			require_once JPATH_SITE.'/libraries/joomla/form/fields/groupedlist.php';
+			$field = new JFormFieldGroupedList($form);
+			$field->setup(new SimpleXMLElement($xml),'','contact2');
+
+		// No need to prepare contacts field
+		} else {
+
+			$field = null;
 
 		}
 

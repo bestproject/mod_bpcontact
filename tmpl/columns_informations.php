@@ -16,7 +16,7 @@
 <?php if( !empty($contact->position) AND (bool)$params->get('display_position','1') ): ?>
 	<div class="position"><?php echo $contact->position ?></div>
 <?php endif ?>
-
+	
 <address>
 	<?php if( !empty($contact->address) AND (bool)$params->get('display_address','1') ): ?>
 		<div class="address"><?php echo $contact->address ?></div>
@@ -56,7 +56,7 @@
 <?php if( !empty($contact->fax) AND (bool)$params->get('display_fax','1') ): ?>
 	<div class="fax"><span><?php echo JText::_('MOD_BPCONTACT_LAYOUT_FAX') ?></span><a href="fax:<?php echo $contact->fax ?>"><?php echo $contact->fax ?></a></div>
 <?php endif ?>
-
+	
 <?php if( !empty($contact->webpage) AND (bool)$params->get('display_webpage','1') ): ?>
 	<div class="webpage">
 		<span><?php echo JText::_('MOD_BPCONTACT_LAYOUT_WEBPAGE') ?></span><a href="<?php echo $contact->webpage ?>"><?php echo str_ireplace(array('http://','https://'), array('',''), $contact->webpage) ?></a>
